@@ -1,1 +1,1 @@
-web: lindireilly4life -port=$PORT
+web: node app.js
