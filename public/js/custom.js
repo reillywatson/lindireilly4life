@@ -734,39 +734,6 @@ if (!Array.prototype.indexOf) {
 
         var $form = $('.actionform');
 
-        //get security question
-        function setFormAutoValue(cb) {
-            $.ajax({
-                'url': 'action.php',
-                'data': {
-                    get_auto_value: ''
-                },
-                'type': "POST",
-                'dataType': 'json',
-            }).done(function(response) {
-
-                if (typeof response.data != 'undefined') {
-                    $form.find('.auto-safe label').text(unescape(response.data));
-                }
-
-                if (cb) {
-                    cb();
-                }
-
-            });
-        }
-
-        $form.on('click', '.auto-refresh', function(e) {
-            e.preventDefault();
-            var $this = $(this);
-            $this.addClass('fa-spin');
-
-            setFormAutoValue(function() {
-                $this.removeClass('fa-spin');
-            });
-        });
-
-        setFormAutoValue();
 
         //ajax contact form
         $form.isValid({
