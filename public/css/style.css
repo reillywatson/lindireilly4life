@@ -1861,6 +1861,11 @@ a.button i {
     font-size: 18px;
     font-weight: 500;
 }
+
+.form input {
+	color: black !important;
+}
+
 select {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -1964,9 +1969,12 @@ select {
     19.  Map Section
 ============================================================ */
 
-#map-section {
-    padding: 0;
+#map-section h3.section-title:before {
+    margin-left: -26px;
+    font-size: 56px;
+    content: "\e008";
 }
+
 #map-section .container {
     position: relative;
 }

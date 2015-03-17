@@ -15,6 +15,25 @@ if (!Array.prototype.indexOf) {
     "use strict";
 
     $(document).ready(function() {
+		
+		var randomName = function() {
+			var names = [
+				"I.P. Freely",
+				"Dan Druff",
+				"Oliver Klozeoff",
+				"Jacques Strappe",
+				"Seymour Butts",
+				"Homer Sexual",
+				"Mike Rotch",
+				"Hugh Jass",
+				"Bea O'Problem",
+				"Anita Bath",
+				"Amanda Hugginkiss",
+				"Ivana Tinkle",
+				"Maya Buttreeks"
+			];
+			return names[Math.floor(Math.random() * names.length)];
+		}
 
         /* Preloader - remove this and loaderOverlay div in html file, to disable loader.
         ==================================================================================== */
@@ -440,6 +459,8 @@ if (!Array.prototype.indexOf) {
             var map = new google.maps.Map(mapElement, mapOptions);
             var infoWindow = new google.maps.InfoWindow();
             var bound = new google.maps.LatLngBounds();
+			bound.extend(new google.maps.LatLng(43.285957, -81.712543));
+			bound.extend(new google.maps.LatLng(43.339916, -78.683063));
             for (var i = 0; i < markers.length; i++) {
 
                 var marker = new google.maps.Marker({
@@ -460,6 +481,61 @@ if (!Array.prototype.indexOf) {
             };
             map.fitBounds(bound);
         }
+
+		/* registry
+		==================================================================================== */
+		var showRegistry = function() {
+			$.ajax({
+				url: "/registry",
+				type: "GET"
+			}).done(function(resp) {
+				$("#registry-container").empty();
+				var gifts = JSON.parse(resp);
+				console.log(gifts);
+				for (var i = 0; i < gifts.length; i++) {
+					var gift = gifts[i];
+					var takersText = "0 takers";
+					if (gift.takers.length > 0) {
+						takersText = "Takers: " + gift.takers.join(", ");
+					}
+					var html = "<a href=\"#\" class=\"registry-item\" id=\"" + gift.giftid + "\">" +
+						"<ul class=\"box center corner\">" +
+							"<li id=\"registry-" + gift.giftid + "\">" +
+								"<div class=\"registry-title\">" + gift.name + "</div>" +
+								"<div class=\"registry-takers\">" + takersText + "</div>" +
+								"<div class=\"corners-topleft\"></div>" +
+								"<div class=\"corners-bottomleft\"></div>" +
+								"<div class=\"corners-topright\"></div>" +
+								"<div class=\"corners-bottomright\"></div>" +
+							"</li>" +
+						"</ul>" +
+					"</a>";
+					$("#registry-container").append(html);
+				}
+				$(".registry-item").on('click', function(e) {
+					e.preventDefault();
+					var myName = prompt("Who's gonna do this?", randomName());
+					if (myName === "") {
+						return;
+					}
+					var giftid = this.id;
+					$.ajax({
+						url: "/registry",
+						type: "POST",
+						data: { name: myName, giftid: giftid }
+					}).done(function(resp) {
+						alert("Thanks!");
+						showRegistry();
+					});
+				});
+			});
+		}
+		showRegistry();
+		
+		/* rsvp
+		==================================================================================== */
+
+		$("#name").attr("placeholder", randomName());
 
         /* Theme Tabs
         ==================================================================================== */
@@ -733,7 +809,8 @@ if (!Array.prototype.indexOf) {
         })(jQuery)
 
         var $form = $('.actionform');
-
+		$form.find("#yes-response").hide();
+		$form.find("#no-response").hide();
 
         //ajax contact form
         $form.isValid({
@@ -756,20 +833,25 @@ if (!Array.prototype.indexOf) {
         }).submit(function(e) {
             e.preventDefault();
             var $this = $(this);
-
-            $this.find('.notification')
-                .attr('class', 'notification');
+			var coming = (document.activeElement.id !== 'rsvpno');
+			if (coming) {
+				$form.find("#yes-response").show();
+			}
+			else {
+				$form.find("#no-response").show();
+			}
+			$this.find('#coming').attr('value', coming);
+            $this.find('.notification').attr('class', 'notification');
             $this.find('.notification').text('');
-
-            // $this.find('.loading').show();
-
+            $this.find('.loading').show();
+			console.log("HUH");
             $.ajax({
                 'url': $this.attr('action'),
                 'type': $this.attr('method'),
                 'dataType': 'json',
                 'data': $(this).serialize()
             }).done(function(response) {
-                $this.find('.loading').hide();
+                $this.find('.loading').hide();				
                 if (typeof response.type != 'undefined' && typeof response.message != 'undefined') {
                     $this.find('.notification')
                         .addClass(response.type + 'msg')
@@ -781,7 +863,6 @@ if (!Array.prototype.indexOf) {
                     }
                 }
             });
-
         });
 
 
