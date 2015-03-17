@@ -26,7 +26,7 @@ app.post("/rsvp", function(req, res) {
 app.post("/rsvpno", function(req, res) {
 	console.log(req.body);
 });
-app.get("/initregistry", function(req, res) {
+/*app.get("/initregistry", function(req, res) {
 	var gifts = [
 		{ giftid: "gift-dancefloor", name: "Tear up the dance floor", takers: [], sortid: 1},
 		{ giftid: "gift-kegstand", name: "Do a keg stand", takers: [], sortid: 2},
@@ -48,7 +48,7 @@ app.get("/initregistry", function(req, res) {
 			res.send("SUCCESS");
 		});
 	});
-});
+});*/
 app.get("/registry", function(req, res) {
 	mongodb.MongoClient.connect(uri, function(err, db) {
 		var registry = db.collection("registry");
