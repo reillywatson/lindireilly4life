@@ -58,6 +58,10 @@ app.get("/registry", function(req, res) {
 	});
 });
 app.post("/registry", function(req, res) {
+	if (!req || !req.body || !req.body.name) {
+		res.send("success");
+		return;
+	}
 	console.log(req.body);
 	mongodb.MongoClient.connect(uri, function(err, db) {
 		var registry = db.collection("registry");
