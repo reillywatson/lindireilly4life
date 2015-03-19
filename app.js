@@ -3,7 +3,32 @@ var path = require("path");
 var mongodb = require("mongodb");
 var bodyParser = require('body-parser');
 var app = express();
+var mailer = require('nodemailer');
 var uri = "mongodb://heroku_app33677492:mki02rshq8orejid96hcn3ssdn@ds041228.mongolab.com:41228/heroku_app33677492";
+
+var smtpTransport = mailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "dailywebshots@gmail.com",
+        pass: "MyDailyWebShots"
+    }
+});
+
+var sendEmail = function(to, subject, body) {
+	var message = {
+		from: "dailywebshots@gmail.com",
+		to: to,
+		subject: subject,
+		text: body,
+	};
+	try {
+		smtpTransport.sendMail(message, function(err, info) {console.log(err); console.log(info);});
+	}
+	catch(err) {
+		console.log(err);
+	}
+}
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -14,6 +39,7 @@ app.post("/secretrsvp", function(req, res) {
 		secret.insert({name: req.body.secret_name}, function(err, result) {});
 	});
 	res.send("<html>Thanks!<br><img src=\"images/lindibaby.jpg\"/></html>");
+	sendEmail(["reillywatson@gmail.com", "lindipruss@gmail.com"], "Secret RSVP!", JSON.stringify(req.body, null, 2));
 });
 app.post("/rsvp", function(req, res) {
 	console.log(req.body);
@@ -21,11 +47,10 @@ app.post("/rsvp", function(req, res) {
 		var rsvp = db.collection("rsvps");
 		rsvp.insert(req.body, function(err, result){});
 		res.send("");
+		sendEmail(["reillywatson@gmail.com", "lindipruss@gmail.com"], "Wedding RSVP", JSON.stringify(req.body, null, 2));
 	});
 });
-app.post("/rsvpno", function(req, res) {
-	console.log(req.body);
-});
+
 /*app.get("/initregistry", function(req, res) {
 	var gifts = [
 		{ giftid: "gift-dancefloor", name: "Tear up the dance floor", takers: [], sortid: 1},
@@ -72,6 +97,7 @@ app.post("/registry", function(req, res) {
 			console.log(result);
 			res.send("success");
 		});
+		sendEmail(["reillywatson@gmail.com", "lindipruss@gmail.com"], "Party Registry!", JSON.stringify(req.body, null, 2));
 	});
 });
 var port = process.env.PORT || 5000;
