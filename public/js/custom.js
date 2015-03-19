@@ -692,7 +692,7 @@ if (!Array.prototype.indexOf) {
         /* Simple Countdown Timer - change belows date to specific one you want.
         ==================================================================================== */
         if($("#countdown").length) {
-            CountDownTimer('07/11/2015 2:00 PM', 'countdown');
+            CountDownTimer('07/11/2015 2:30 PM', 'countdown');
         }
         function CountDownTimer(dt, id) {
             var end = new Date(dt);
