@@ -496,12 +496,12 @@ if (!Array.prototype.indexOf) {
 					var gift = gifts[i];
 					var takersText = "0 takers";
 					if (gift.takers.length > 0) {
-						takersText = "Takers: " + gift.takers.join(", ");
+						takersText = "Takers:<br/>" + gift.takers.join(",<br/>");
 					}
 					var html = "<a href=\"#\" class=\"registry-item\" id=\"" + gift.giftid + "\">" +
 						"<ul class=\"box center corner\">" +
 							"<li id=\"registry-" + gift.giftid + "\">" +
-								"<div class=\"registry-title\">" + gift.name + "</div>" +
+								"<div class=\"registry-title\"><b>" + gift.name + "</b></div>" +
 								"<div class=\"registry-takers\">" + takersText + "</div>" +
 								"<div class=\"corners-topleft\"></div>" +
 								"<div class=\"corners-bottomleft\"></div>" +
