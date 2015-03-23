@@ -515,7 +515,7 @@ if (!Array.prototype.indexOf) {
 				$(".registry-item").on('click', function(e) {
 					e.preventDefault();
 					var myName = prompt("Who's gonna do this?", randomName());
-					if (myName === "") {
+					if (!myName) {
 						return;
 					}
 					var giftid = this.id;
