@@ -844,14 +844,14 @@ if (!Array.prototype.indexOf) {
             $this.find('.notification').attr('class', 'notification');
             $this.find('.notification').text('');
             $this.find('.loading').show();
-			console.log("HUH");
             $.ajax({
                 'url': $this.attr('action'),
                 'type': $this.attr('method'),
                 'dataType': 'json',
                 'data': $(this).serialize()
             }).done(function(response) {
-                $this.find('.loading').hide();				
+                alert("Thanks for responding!");
+                $this.find('.loading').hide();
                 if (typeof response.type != 'undefined' && typeof response.message != 'undefined') {
                     $this.find('.notification')
                         .addClass(response.type + 'msg')

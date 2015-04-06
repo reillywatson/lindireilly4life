@@ -42,11 +42,11 @@ app.post("/secretrsvp", function(req, res) {
 	sendEmail(["reillywatson@gmail.com", "lindipruss@gmail.com"], "Secret RSVP!", JSON.stringify(req.body, null, 2));
 });
 app.post("/rsvp", function(req, res) {
-	console.log(req.body);
 	mongodb.MongoClient.connect(uri, function(err, db) {
 		var rsvp = db.collection("rsvps");
-		rsvp.insert(req.body, function(err, result){});
-		res.send("");
+		rsvp.insert(req.body, function(err, result){
+			res.send("{}");
+		});
 		sendEmail(["reillywatson@gmail.com", "lindipruss@gmail.com"], "Wedding RSVP", JSON.stringify(req.body, null, 2));
 	});
 });
